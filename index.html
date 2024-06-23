@@ -86,11 +86,13 @@ docker pull {{host}}/coredns/coredns:latest # 拉取 coredns 镜像</code></pre>
         <p><a href="https://blog.whyun.com" target="_blank">访问博客 blog.whyun.com</a></p>
     </div>
     <script>
-        const host = document.location.hostname;
-        const codes = document.querySelectorAll('code');
-        for (const code of codes) {
-            code.textContent = code.textContent.replace(host, '{{host}}');
-        }
+        (() => {
+            const host = document.location.hostname;
+            const codes = document.querySelectorAll('code');
+            for (const code of codes) {
+                code.textContent = code.textContent.replace('{{host}}', host);
+            }
+        })();
     </script>
 </body>
 </html>
