@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>镜像使用说明</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        .content {
+            margin-bottom: 20px;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #333;
+            color: #fff;
+        }
+        pre {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: 'Source Code Pro', monospace;
+        }
+        a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 600px) {
+            .container {
+                margin: 20px;
+                padding: 15px;
+            }
+            .header {
+                padding: 15px 0;
+            }
+        }
+    </style>
+    <link href="https://fonts.loli.net/css2?family=Roboto:wght@400;700&family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="header">
+        <h1>镜像使用说明</h1>
+    </div>
+    <div class="container">
+        <div class="content">
+            <p>为了加速镜像拉取，你可以使用以下命令设置 registry mirror:</p>
+            <pre><code>sudo tee /etc/docker/daemon.json &lt;&lt;EOF
+{
+    "registry-mirrors": ["https://{{host}}"]
+}
+EOF</code></pre>
+            <p>为了避免 Worker 用量耗尽，你可以手动 pull 镜像然后 re-tag 之后 push 至本地镜像仓库:</p>
+            <pre><code>docker pull {{host}}/library/alpine:latest # 拉取 library 镜像
+docker pull {{host}}/coredns/coredns:latest # 拉取 coredns 镜像</code></pre>
+        </div>
+    </div>
+    <div class="footer">
+        <p>Powered by Cloudflare Workers</p>
+        <p><a href="https://blog.whyun.com" target="_blank">访问博客 blog.whyun.com</a></p>
+    </div>
+    <script>
+        const host = document.location.hostname;
+        const codes = document.querySelectorAll('code');
+        for (const code of codes) {
+            code.textContent = code.textContent.replace(host, '{{host}}');
+        }
+    </script>
+</body>
+</html>
