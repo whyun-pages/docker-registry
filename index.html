@@ -90,7 +90,7 @@ docker pull {{host}}/coredns/coredns:latest # 拉取 coredns 镜像</code></pre>
             const host = document.location.hostname;
             const codes = document.querySelectorAll('code');
             for (const code of codes) {
-                code.textContent = code.textContent.replace('{{host}}', host);
+                code.textContent = code.textContent.replaceAll('{{host}}', host);
             }
         })();
     </script>
