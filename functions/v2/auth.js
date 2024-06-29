@@ -1,5 +1,7 @@
 
 const BEARER = 'Bearer ';
+// https://kevinfeng.github.io/post/docker-registry-authentication/
+// https://distribution.github.io/distribution/spec/auth/token/
 /**
  * Parses the WWW-Authenticate header and extracts the realm, service, and scope.
  *

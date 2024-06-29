@@ -24,7 +24,10 @@ export async function onRequest(context) {
   if (wwwAuth && context.env.SELF_AUTH === 'true') {
     headers.set(
       "www-authenticate", 
-      wwwAuth.replace(/realm=".+"/, `realm="${url.protocol}//${url.host}/v2/auth"`)
+      wwwAuth.replace(
+        /realm=\\\\"([^"]+)\\\\"/, 
+        `realm=\\"${url.protocol}//${url.host}/v2/auth\\"`
+      )
     );
   }
   console.log(
