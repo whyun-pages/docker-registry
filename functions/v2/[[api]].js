@@ -15,10 +15,15 @@ export async function onRequest(context) {
     redirect: "follow",
   });
   const registryResponse = await fetch(registryRequest);
+  let content = '';
+  if (registryResponse.headers.get("content-type").indexOf('json') !== -1) {
+    content = registryResponse.body;
+  }
   console.log(
     request.url, 
     registryResponse.status, 
     JSON.stringify(Object.fromEntries(new Map(registryResponse.headers))),
+    content.toString(),
   );
   const responseHeaders = new Headers(registryResponse.headers);
   responseHeaders.set("access-control-allow-origin", originalHost);
