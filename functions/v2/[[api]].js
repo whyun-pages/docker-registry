@@ -17,18 +17,18 @@ export async function onRequest(context) {
   const registryResponse = await fetch(registryRequest);
   let content = '';
   if (registryResponse.headers.get("content-type").indexOf('json') !== -1) {
-    content = await registryResponse.json();
+    content = await registryResponse.clone().json();
   }
   console.log(
     request.url, 
     registryResponse.status, 
     JSON.stringify(Object.fromEntries(new Map(registryResponse.headers))),
-    content.toString(),
+    JSON.stringify(content),
   );
   const responseHeaders = new Headers(registryResponse.headers);
   responseHeaders.set("access-control-allow-origin", originalHost);
   responseHeaders.set("access-control-allow-headers", "Authorization");
-  return new Response(content || registryResponse.body, {
+  return new Response(registryResponse.body, {
     status: registryResponse.status,
     statusText: registryResponse.statusText,
     headers: responseHeaders,
