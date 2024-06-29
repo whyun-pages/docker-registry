@@ -15,7 +15,12 @@ export async function onRequest(context) {
     redirect: "follow",
   });
   const registryResponse = await fetch(registryRequest);
-  console.log(request.url, request.headers, registryResponse.status, registryResponse.headers);
+  console.log(
+    request.url, 
+    JSON.stringify(request.headers),
+    registryResponse.status, 
+    JSON.stringify(registryResponse.headers),
+  );
   const responseHeaders = new Headers(registryResponse.headers);
   responseHeaders.set("access-control-allow-origin", originalHost);
   responseHeaders.set("access-control-allow-headers", "Authorization");
