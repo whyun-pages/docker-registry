@@ -17,7 +17,7 @@ export async function onRequest(context) {
   const registryResponse = await fetch(registryRequest);
   let content = '';
   if (registryResponse.headers.get("content-type").indexOf('json') !== -1) {
-    content = registryResponse.body;
+    content = await registryResponse.json();
   }
   console.log(
     request.url, 
@@ -28,7 +28,7 @@ export async function onRequest(context) {
   const responseHeaders = new Headers(registryResponse.headers);
   responseHeaders.set("access-control-allow-origin", originalHost);
   responseHeaders.set("access-control-allow-headers", "Authorization");
-  return new Response(registryResponse.body, {
+  return new Response(content || registryResponse.body, {
     status: registryResponse.status,
     statusText: registryResponse.statusText,
     headers: responseHeaders,
