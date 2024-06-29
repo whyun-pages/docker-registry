@@ -17,9 +17,9 @@ export async function onRequest(context) {
   const registryResponse = await fetch(registryRequest);
   console.log(
     request.url, 
-    JSON.stringify(request.headers),
+    new Map(request.headers),
     registryResponse.status, 
-    JSON.stringify(registryResponse.headers),
+    new Map(registryResponse.headers),
   );
   const responseHeaders = new Headers(registryResponse.headers);
   responseHeaders.set("access-control-allow-origin", originalHost);
