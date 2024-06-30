@@ -1,23 +1,23 @@
-import { getRegistryHost } from "../common";
-const HEADER_WWW_AUTHENTICATE = 'www-authenticate';
+import { getRegistryHost, HEADER_WWW_AUTHENTICATE } from '../common';
+
 export async function onRequest(context) {
-  const request = context.request
+  const request = context.request;
   const url = new URL(request.url);
   const path = url.pathname;
-  const originalHost = request.headers.get("host");
+  const originalHost = request.headers.get('host');
   const registryHost = getRegistryHost(context.env, originalHost);
   const headers = new Headers(request.headers);
-  headers.set("host", registryHost);
+  headers.set('host', registryHost);
   const registryUrl = `https://${registryHost}${path}`;
   const registryRequest = new Request(registryUrl, {
     method: request.method,
     headers: headers,
     body: request.body,
-    redirect: "follow",
+    redirect: 'follow',
   });
   const registryResponse = await fetch(registryRequest);
   let content = '';
-  if (registryResponse.headers.get("content-type").indexOf('json') !== -1) {
+  if (registryResponse.headers.get('content-type').indexOf('json') !== -1) {
     content = await registryResponse.clone().json();
   }
 
@@ -28,8 +28,8 @@ export async function onRequest(context) {
     JSON.stringify(content),
   );
   const responseHeaders = new Headers(registryResponse.headers);
-  responseHeaders.set("access-control-allow-origin", originalHost);
-  responseHeaders.set("access-control-allow-headers", "Authorization");
+  responseHeaders.set('access-control-allow-origin', originalHost);
+  responseHeaders.set('access-control-allow-headers', 'Authorization');
   const wwwAuth = responseHeaders.get(HEADER_WWW_AUTHENTICATE);
   if (wwwAuth && context.env.SELF_AUTH === 'true') {
     responseHeaders.set(

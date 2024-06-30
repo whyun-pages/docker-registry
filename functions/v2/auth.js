@@ -1,4 +1,4 @@
-
+import { getRegistryHost, HEADER_WWW_AUTHENTICATE } from '../common';
 const BEARER = 'Bearer ';
 // https://kevinfeng.github.io/post/docker-registry-authentication/
 // https://distribution.github.io/distribution/spec/auth/token/
@@ -16,7 +16,7 @@ function getAuthConfig(wwwAuth) {
     const m = new Map();
     wwwAuth.split(',').forEach((kv) => {
         const [key, value] = kv.split('=');
-        m.set(key, (value || '').replace(/^"|"$/g, ''))
+        m.set(key, (value || '').replace(/^"|"$/g, ''));
     });
 
     return {
@@ -26,28 +26,28 @@ function getAuthConfig(wwwAuth) {
 }
 export async function onRequest(context) {
     const request = context.request;
-    const originalHost = request.headers.get("host");
+    const originalHost = request.headers.get('host');
     const registryHost = getRegistryHost(context.env, originalHost);
     const headers = new Headers(request.headers);
-    headers.set("host", registryHost);
+    headers.set('host', registryHost);
     const registryUrl = `https://${registryHost}/v2/`;
     const registryRequest = new Request(registryUrl, {
         method: request.method,
         headers: headers,
         body: request.body,
-        redirect: "follow",
+        redirect: 'follow',
     });
     const registryResponse = await fetch(registryRequest);
-    let content = '';
-    if (registryResponse.headers.get("content-type").indexOf('json') !== -1) {
-        content = await registryResponse.clone().json();
-    }
+    // let content = '';
+    // if (registryResponse.headers.get('content-type').indexOf('json') !== -1) {
+    //     content = await registryResponse.clone().json();
+    // }
     if (registryResponse.status !== 401) {//auth success
         console.log('auth already success');
         return registryResponse;
     }
     // 重新鉴权
-    const wwwAuth = registryResponse.headers.get("www-authenticate");
+    const wwwAuth = registryResponse.headers.get(HEADER_WWW_AUTHENTICATE);
     const {realm, service} = getAuthConfig(wwwAuth);
     const authUrl = new URL(realm);
     if (service) {
@@ -62,8 +62,8 @@ export async function onRequest(context) {
     const authRequest = new Request(authUrl, {
         method: 'GET',
         headers: headers,
-        redirect: "follow",
+        redirect: 'follow',
     });
     const authResponse = await fetch(authRequest);
-    return authResponse
+    return authResponse;
 }

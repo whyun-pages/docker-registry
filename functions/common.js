@@ -1,3 +1,4 @@
+export const HEADER_WWW_AUTHENTICATE = 'www-authenticate';
 export function getRegistryHost(env, reqHost) {
     switch (reqHost) {
         case env.REGISTRY_QUAY:
