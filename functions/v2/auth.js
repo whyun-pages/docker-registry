@@ -27,6 +27,7 @@ function getAuthConfig(wwwAuth) {
 export async function onRequest(context) {
     const request = context.request;
     const originalHost = request.headers.get('host');
+    console.log('auth header', request.headers.get('authorization'));
     const registryHost = getRegistryHost(context.env, originalHost);
     const headers = new Headers(request.headers);
     headers.set('host', registryHost);
