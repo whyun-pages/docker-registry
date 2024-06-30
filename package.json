@@ -1,0 +1,31 @@
+{
+  "name": "docker-registry",
+  "version": "1.0.0",
+  "description": "proxy dockerhub via cloudflare pages",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "eslint": "eslint --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/whyun-pages/docker-registry.git"
+  },
+  "keywords": [
+    "dockerhub",
+    "cloudflare"
+  ],
+  "author": "yunnysunny",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/whyun-pages/docker-registry/issues"
+  },
+  "homepage": "https://github.com/whyun-pages/docker-registry#readme",
+  "devDependencies": {
+    "@eslint/js": "^9.6.0",
+    "eslint": "^9.6.0",
+    "globals": "^15.6.0"
+  }
+}
