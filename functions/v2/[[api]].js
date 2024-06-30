@@ -36,7 +36,7 @@ export async function onRequest(context) {
       HEADER_WWW_AUTHENTICATE, 
       wwwAuth.replace(
         /realm="([^"]+)"/, 
-        `realm="${url.protocol}/${url.host}/v2/auth"`
+        `realm="${url.protocol}//${url.host}/v2/auth"`
       )
     );
   }
