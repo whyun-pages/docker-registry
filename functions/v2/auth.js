@@ -38,10 +38,7 @@ export async function onRequest(context) {
         redirect: 'follow',
     });
     const registryResponse = await fetch(registryRequest);
-    // let content = '';
-    // if (registryResponse.headers.get('content-type').indexOf('json') !== -1) {
-    //     content = await registryResponse.clone().json();
-    // }
+
     if (registryResponse.status !== 401) {//auth success
         console.log('auth already success');
         return registryResponse;
@@ -65,5 +62,14 @@ export async function onRequest(context) {
         redirect: 'follow',
     });
     const authResponse = await fetch(authRequest);
+    let content = '';
+    if (authResponse.headers.get('content-type').indexOf('json') !== -1) {
+        content = await authResponse.clone().json();
+    }
+    console.log(
+        authResponse.status,
+        JSON.stringify(Object.fromEntries(new Map(authResponse.headers))),
+        JSON.stringify(content),
+    );
     return authResponse;
 }
