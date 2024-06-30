@@ -25,8 +25,8 @@ export async function onRequest(context) {
     headers.set(
       "www-authenticate", 
       wwwAuth.replace(
-        /realm=\\\\"([^"]+)\\\\"/, 
-        `realm=\\"${url.protocol}//${url.host}/v2/auth\\"`
+        /realm="([^"]+)"/, 
+        `realm="${url.protocol}/${url.host}/v2/auth"`
       )
     );
   }
