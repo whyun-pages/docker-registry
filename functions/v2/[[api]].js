@@ -16,17 +16,17 @@ export async function onRequest(context) {
     redirect: 'follow',
   });
   const registryResponse = await fetch(registryRequest);
-  let content = '';
-  if (registryResponse.headers.get('content-type').indexOf('json') !== -1) {
-    content = await registryResponse.clone().json();
-  }
+  // let content = '';
+  // if (registryResponse.headers.get('content-type').indexOf('json') !== -1) {
+  //   content = await registryResponse.clone().json();
+  // }
 
   console.log(
     request.url,
     registryResponse.status,
     // headers.get('authorization'),
     JSON.stringify(Object.fromEntries(new Map(registryResponse.headers))),
-    JSON.stringify(content),
+    // JSON.stringify(content),
   );
   const responseHeaders = new Headers(registryResponse.headers);
   responseHeaders.set('access-control-allow-origin', originalHost);

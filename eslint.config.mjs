@@ -21,6 +21,7 @@ export default [
         'error',
         'always'
       ],
+      'no-undef': 'error',
     }
   }
 ];
