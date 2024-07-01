@@ -1,5 +1,7 @@
+# docker-registry
 使用 cloudflare pages 来加速访问 dockerhub 镜像。
 
+## 快速部署
 请将本项目仓库 fork 到自己的 github 仓库，然后在 cloudflare pages 中新建项目来使用。
 1. 使用 cloudflare 账号登录其 dashboard 后台，选择 **Workers 和 Pages** 菜单，然后点击 **概述**，接着点击 **创建** 按钮，在打开的页面中选择 Pages 选项卡：
 ![](docs/init_with_git.png)
@@ -39,3 +41,10 @@
 **图6**
 
 更多详细使用教程参见 [cloudflare page 教程（一）项目初始化](https://blog.whyun.com/posts/project-init-on-cloudflare-pages/) 。
+
+## 配置
+可以通过配置若干环境变量，以用来对当前镜像站做权限控制。
+1. `SELF_AUTH`: 镜像站是否开启自身认证功能，默认为空，设置为 `true` 启用。默认状态下会使用官方站点进行认证，开启后会将认证请求转发到本站点上来，然后由本站点代为转发认证到官方站点。
+2. `WHITE_LIST`: 镜像站允许的用户列表，多个用户之间用英文逗号分隔，默认为空。注意此环境变量必须在 `SELF_AUTH` 为 `true` 时才生效。
+
+cloudflare Pages 的环境变量配置方法，请参见 [官方文档](https://developers.cloudflare.com/pages/functions/bindings/#environment-variables) 。
