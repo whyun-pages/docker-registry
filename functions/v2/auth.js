@@ -1,5 +1,11 @@
-import { getRegistryHost, HEADER_WWW_AUTHENTICATE } from '../common';
-const BEARER = 'Bearer ';
+import { 
+    getRegistryHost, 
+    HEADER_WWW_AUTHENTICATE, 
+    HEADER_AUTHORIZATION,
+    BEARER,
+    checkWhiteList,
+} from '../common';
+
 // https://kevinfeng.github.io/post/docker-registry-authentication/
 // https://distribution.github.io/distribution/spec/auth/token/
 /**
@@ -27,6 +33,15 @@ function getAuthConfig(wwwAuth) {
 export async function onRequest(context) {
     const request = context.request;
     const originalHost = request.headers.get('host');
+    if (context.env.WHITE_LIST) {
+        const authHeader = request.headers.get(HEADER_AUTHORIZATION);
+        if (!authHeader) {
+            return new Response('Unauthorized', {status: 401});
+        }
+        if (!checkWhiteList(authHeader, context.env.WHITE_LIST.split(','))) {
+            return new Response('Unauthorized', {status: 403});
+        }
+    }
     // console.log('auth header', request.headers.get('authorization'));
     const registryHost = getRegistryHost(context.env, originalHost);
     const headers = new Headers(request.headers);

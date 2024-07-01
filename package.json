@@ -7,6 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
+    "page-dev": "wrangler pages dev public --binding WHITE_LIST=yunnysunny",
     "eslint": "eslint --fix"
   },
   "repository": {
@@ -25,7 +26,9 @@
   "homepage": "https://github.com/whyun-pages/docker-registry#readme",
   "devDependencies": {
     "@eslint/js": "^9.6.0",
+    "env-cmd": "^10.1.0",
     "eslint": "^9.6.0",
-    "globals": "^15.6.0"
+    "globals": "^15.6.0",
+    "wrangler": "^3.62.0"
   }
 }
