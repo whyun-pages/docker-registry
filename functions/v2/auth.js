@@ -35,6 +35,7 @@ export async function onRequest(context) {
     const originalHost = request.headers.get('host');
     if (context.env.WHITE_LIST) {
         const authHeader = request.headers.get(HEADER_AUTHORIZATION);
+        // console.log('auth header', authHeader);
         if (!authHeader) {
             return new Response('Unauthorized', {status: 401});
         }
@@ -42,7 +43,6 @@ export async function onRequest(context) {
             return new Response('Unauthorized', {status: 403});
         }
     }
-    // console.log('auth header', request.headers.get('authorization'));
     const registryHost = getRegistryHost(context.env, originalHost);
     const headers = new Headers(request.headers);
     headers.set('host', registryHost);
