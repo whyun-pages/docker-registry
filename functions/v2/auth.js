@@ -35,7 +35,7 @@ export async function onRequest(context) {
     const originalHost = request.headers.get('host');
     if (context.env.WHITE_LIST) {
         const authHeader = request.headers.get(HEADER_AUTHORIZATION);
-        // console.log('auth header', authHeader);
+        console.log('auth header', authHeader, context.env.WHITE_LIST);
         if (!authHeader) {
             return new Response('Unauthorized', {status: 401});
         }
