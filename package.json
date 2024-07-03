@@ -2,12 +2,11 @@
   "name": "docker-registry",
   "version": "1.0.0",
   "description": "proxy dockerhub via cloudflare pages",
-  "main": "index.js",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-    "page-dev": "wrangler pages dev public --binding WHITE_LIST=yunnysunny",
+    "page-dev": "wrangler pages dev public", 
     "eslint": "eslint --fix"
   },
   "repository": {

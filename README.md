@@ -47,4 +47,5 @@
 1. `SELF_AUTH`: 镜像站是否开启自身认证功能，默认为空，设置为 `true` 启用。默认状态下会使用官方站点进行认证，开启后会将认证请求转发到本站点上来，然后由本站点代为转发认证到官方站点。
 2. `WHITE_LIST`: 镜像站允许的用户列表，多个用户之间用英文逗号分隔，默认为空。注意此环境变量必须在 `SELF_AUTH` 为 `true` 时才生效。
 
-cloudflare Pages 的环境变量配置方法，请参见 [官方文档](https://developers.cloudflare.com/pages/functions/bindings/#environment-variables) 。
+> 在 cloudflare Pages 的面板中设置环境时，需要将其设置为加密状态，否则将无法添加，这是由于我们在项目中启用了 wrangler.toml，Pages 将强制从 wrangler.toml 中读取未加密的环境变量。如果你想手动设置环境变量，要么通过 wrangler.toml 配置 `vars` 变量，要么通过 cloudflare dashboard 的面板设置加密变量。
+> ![](docs/set_variable_secret.png)
