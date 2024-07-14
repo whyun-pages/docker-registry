@@ -71,7 +71,7 @@ export async function onRequest(context) {
     if (scope) {
         authUrl.searchParams.set('scope', scope);
     }
-
+    console.log('req auth url',authUrl);
     const authRequest = new Request(authUrl, {
         method: 'GET',
         headers: headers,
