@@ -24,7 +24,7 @@ export async function onRequest(context) {
   console.log(
     request.url,
     registryResponse.status,
-    headers.get('authorization'),
+    // headers.get('authorization'),
     JSON.stringify(Object.fromEntries(new Map(registryResponse.headers))),
     // JSON.stringify(content),
   );

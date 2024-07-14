@@ -75,8 +75,8 @@ export async function onRequest(context) {
     console.log(
         'req auth url',
         authUrl, 
-        'req headers', 
-        JSON.stringify(Object.fromEntries(new Map(headers)))
+        // 'req headers', 
+        // JSON.stringify(Object.fromEntries(new Map(headers)))
     );
     const authRequest = new Request(authUrl, {
         method: 'GET',
