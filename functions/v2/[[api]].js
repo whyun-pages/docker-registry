@@ -19,12 +19,18 @@ export async function onRequest(context) {
   const isDebug = context.env.DEBUG === 'true';
   
   if (isDebug) {
+    const responseCloned = registryResponse.clone();
+    let body = '';
+    if (registryResponse.headers.get('content-type').includes('json')) {
+      body = await responseCloned.text();
+    }
     console.log(
       'req on',
       request.url,
       registryResponse.status,
-      'req auth header', headers.get('authorization'),
+      'req headers', JSON.stringify(Object.fromEntries(new Map(request.headers))),
       'res headers', JSON.stringify(Object.fromEntries(new Map(registryResponse.headers))),
+      body,
     );
   }
   const responseHeaders = new Headers(registryResponse.headers);

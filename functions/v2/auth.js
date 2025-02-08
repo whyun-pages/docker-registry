@@ -90,7 +90,7 @@ export async function onRequest(context) {
             'req auth url',
             authUrl, 
             JSON.stringify(Object.fromEntries(new Map(headers))),
-            registryResponse.status,
+            authResponse.status,
             authResponseBody,
         );
     }
