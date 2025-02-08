@@ -33,10 +33,12 @@ function getAuthConfig(wwwAuth) {
 export async function onRequest(context) {
     const request = context.request;
     const originalHost = request.headers.get('host');
+    // const isDebug = context.env.DEBUG === 'true';
     if (context.env.WHITE_LIST) {
         const authHeader = request.headers.get(HEADER_AUTHORIZATION);
         // console.log('auth header', authHeader, context.env.WHITE_LIST);
         if (!authHeader) {
+            console.warn('header', HEADER_AUTHORIZATION, ' not found');
             return new Response('Unauthorized', {status: 401});
         }
         if (!checkWhiteList(authHeader, context.env.WHITE_LIST.split(','))) {
@@ -84,6 +86,8 @@ export async function onRequest(context) {
         redirect: 'follow',
     });
     const authResponse = await fetch(authRequest);
-
+    if (authResponse.status !== 200) {
+        console.log('auth failed', authResponse.body);
+    }
     return authResponse;
 }

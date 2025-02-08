@@ -16,10 +16,6 @@ export async function onRequest(context) {
     redirect: 'follow',
   });
   const registryResponse = await fetch(registryRequest);
-  // let content = '';
-  // if (registryResponse.headers.get('content-type').indexOf('json') !== -1) {
-  //   content = await registryResponse.clone().json();
-  // }
 
   console.log(
     request.url,
