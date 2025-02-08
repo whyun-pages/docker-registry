@@ -33,7 +33,7 @@ function getAuthConfig(wwwAuth) {
 export async function onRequest(context) {
     const request = context.request;
     const originalHost = request.headers.get('host');
-    // const isDebug = context.env.DEBUG === 'true';
+    const isDebug = context.env.DEBUG === 'true';
     if (context.env.WHITE_LIST) {
         const authHeader = request.headers.get(HEADER_AUTHORIZATION);
         // console.log('auth header', authHeader, context.env.WHITE_LIST);
@@ -74,20 +74,25 @@ export async function onRequest(context) {
         authUrl.searchParams.set('scope', scope);
     }
     headers.set('host', authUrl.host);
-    console.log(
-        'req auth url',
-        authUrl, 
-        // 'req headers', 
-        // JSON.stringify(Object.fromEntries(new Map(headers)))
-    );
+
     const authRequest = new Request(authUrl, {
         method: 'GET',
         headers: headers,
         redirect: 'follow',
     });
     const authResponse = await fetch(authRequest);
-    if (authResponse.status !== 200) {
-        console.log('auth failed', authResponse.body);
+
+    if (isDebug) {
+        // 克隆 authResponse，以便后续读取
+        const authResponseClone = authResponse.clone();
+        const authResponseBody = await authResponseClone.text();
+        console.log(
+            'req auth url',
+            authUrl, 
+            JSON.stringify(Object.fromEntries(new Map(headers))),
+            registryResponse.status,
+            authResponseBody,
+        );
     }
     return authResponse;
 }

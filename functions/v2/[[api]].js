@@ -16,14 +16,17 @@ export async function onRequest(context) {
     redirect: 'follow',
   });
   const registryResponse = await fetch(registryRequest);
-
-  console.log(
-    request.url,
-    registryResponse.status,
-    // headers.get('authorization'),
-    JSON.stringify(Object.fromEntries(new Map(registryResponse.headers))),
-    // JSON.stringify(content),
-  );
+  const isDebug = context.env.DEBUG === 'true';
+  
+  if (isDebug) {
+    console.log(
+      'req on',
+      request.url,
+      registryResponse.status,
+      'req auth header', headers.get('authorization'),
+      'res headers', JSON.stringify(Object.fromEntries(new Map(registryResponse.headers))),
+    );
+  }
   const responseHeaders = new Headers(registryResponse.headers);
   responseHeaders.set('access-control-allow-origin', originalHost);
   responseHeaders.set('access-control-allow-headers', 'Authorization');
