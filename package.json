@@ -6,7 +6,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "page-dev": "wrangler pages dev public", 
+    "page-dev": "wrangler pages dev public",
     "eslint": "eslint --fix"
   },
   "repository": {

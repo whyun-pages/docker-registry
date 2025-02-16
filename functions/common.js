@@ -1,4 +1,3 @@
-import { Buffer } from 'node:buffer';
 export const HEADER_WWW_AUTHENTICATE = 'www-authenticate';
 export const HEADER_AUTHORIZATION = 'authorization';
 export const BEARER = 'Bearer ';
@@ -32,6 +31,6 @@ export function checkWhiteList(authHeader, whiteList) {
     if (authHeader.startsWith(BASIC_PREFIX)) {
         authHeader = authHeader.substring(BASIC_PREFIX.length);
     }
-    const authUser = Buffer.from(authHeader, 'base64').toString().split(':')[0];
+    const authUser = atob(authHeader).split(':')[0];
     return whiteList.includes(authUser);
 }
