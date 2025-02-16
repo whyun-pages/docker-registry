@@ -9,7 +9,7 @@ export async function onRequest(context) {
   const headers = new Headers(request.headers);
   headers.set('host', registryHost);
   const blobReq = path.match(/blobs\/sha256:(\w+)$/);
-  if (blobReq.length > 1) {
+  if (blobReq?.length > 1) {
     headers.set('x-amz-content-sha256', blobReq[1]);
   }
   const registryUrl = `https://${registryHost}${path}`;
