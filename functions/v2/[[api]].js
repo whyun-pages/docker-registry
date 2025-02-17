@@ -1,4 +1,8 @@
-import { getRegistryHost, HEADER_WWW_AUTHENTICATE } from '../common';
+import {
+  getRegistryHost,
+  HEADER_WWW_AUTHENTICATE,
+  getAmzDate,
+} from '../common';
 
 export async function onRequest(context) {
   const request = context.request;
@@ -11,6 +15,7 @@ export async function onRequest(context) {
   const blobReq = path.match(/blobs\/sha256:(\w+)$/);
   if (blobReq?.length > 1) {
     headers.set('x-amz-content-sha256', 'UNSIGNED-PAYLOAD');
+    headers.set('x-amz-date', getAmzDate());
   }
   const registryUrl = `https://${registryHost}${path}`;
   const registryRequest = new Request(registryUrl, {
