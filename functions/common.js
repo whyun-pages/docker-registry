@@ -2,6 +2,7 @@ export const HEADER_WWW_AUTHENTICATE = 'www-authenticate';
 export const HEADER_AUTHORIZATION = 'authorization';
 export const BEARER = 'Bearer ';
 export const BASIC_PREFIX = 'Basic ';
+export const DOCKER_HUB_REGISTRY = 'registry-1.docker.io';
 export function getRegistryHost(env, reqHost) {
     switch (reqHost) {
         case env.REGISTRY_QUAY:
@@ -15,7 +16,7 @@ export function getRegistryHost(env, reqHost) {
         case env.REGISTRY_GHCR:
             return 'ghcr.io';
         default:
-            return 'registry-1.docker.io';
+            return DOCKER_HUB_REGISTRY;
     }
 }
 /**
