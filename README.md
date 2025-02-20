@@ -43,21 +43,24 @@
 更多详细使用教程参见 [cloudflare page 教程（一）项目初始化](https://blog.whyun.com/posts/project-init-on-cloudflare-pages/) 。
 
 ## 配置
+### 登录配置
+
+当前项目部署完成后，必须使用 docker login 命令进行登录，才能正常使用。否则进行 docker pull 镜像的时候，会如下报错：
+```
+Error response from daemon: Head "https://你的部署域名/v2/library/镜像名/manifests/latest": unauthorized: Unauthorized
+```
+
+同时需要注意，docker login 默认会登录 docker hub 镜像站，但是我们的自己搭建的 Pages 网站使用的域名和 docker.io 不是一个域名，所以需要在调用 docker login 命令时追加 Pages 网站部署域名，即 `docker login 你的部署域名`。
+
+例如你的镜像站域名是 `docker-registry-xxx.pages.dev` ，那么需要保证调用 `docker login docker-registry-xxx.pages.dev` 是成功的。
+### 权限配置
 可以通过配置若干环境变量，来对镜像代理的行为做控制。
 
-> 在 cloudflare Pages 的面板中设置环境时，需要将其设置为加密状态，否则将无法添加，这是由于我们在项目中启用了 wrangler.toml，Pages 将强制从 wrangler.toml 中读取未加密的环境变量。如果你想手动设置环境变量，要么通过 wrangler.toml 配置 `vars` 变量，要么通过 cloudflare dashboard 的面板设置加密变量。使用者可以根据情况做选择。
+> 以下用到的环境变量，通过 cloudflare dashboard 的面板进行设置。
 > ![](docs/set_variable_secret.png)
-### 权限配置
 
 #### WHITE_LIST
-镜像站允许的用户列表，多个用户之间用英文逗号分隔，默认为空。`WHITE_LIST` 生效后，在拉取任何镜像时，你需要确保 `docker login` (或者 `podman login`) 命令之前已经调用成功，否则后端读取不到登录用户，会直接报错，不会再拉取镜像。docker login 默认会登录 docker hub 镜像站，但是我们的自己搭建的 Pages 网站使用的域名和 docker.io 不是一个域名，所以需要在调用 docker login 命令时追加 Pages 网站域名，即 `docker login Pages网站域名`。
+镜像站允许的用户列表，多个用户之间用英文逗号分隔，默认为空。`WHITE_LIST` 生效后，在拉取任何镜像时，你需要确保 `docker login` (或者 `podman login`) 命令之前已经调用成功，否则后端读取不到登录用户，会直接报错，不会再拉取镜像。
 
-例如你的镜像站域名是 `docker-registry-xxx.pages.dev` ，那么需要保证之前调用 `docker login docker-registry-xxx.pages.dev` 是成功的。
-
-`WHITE_LIST` 配置完，但是没有正常做 docker login 时，会报如下错误：
-
-```
-WARN[0069] Failed, retrying in 1s ... (2/3). Error: copying system image from manifest list: parsing image configuration: Get "https://production.cloudflare.docker.com/registry-v2/docker/registry/v2/blobs/sha256/a6/a606584aa9aa875552092ec9e1d62cb98d486f51f389609914039aabd9414687/data?verify=1720932472-9QlPGlfC%2B%2FDVbFq6eweuyXqOe40%3D": dial tcp 128.242.250.148:443: i/o timeout
-```
 
 
