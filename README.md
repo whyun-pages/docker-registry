@@ -1,6 +1,13 @@
 # docker-registry
 使用 cloudflare pages 来加速访问 dockerhub 镜像。
 
+## 风险警告
+
+Cloudflare 在 2024 年 12 月 3 日更新使用协议，此次更新 Cloudflare 明确说明不得将其服务作为代理使用，否则将被视为违反服务条款的行为可能会被封号。具体参见 Cloudflare Terms 第 2 项服务、第 2.2 项使用服务、第 2.2.1 项限制中。具体参见 [Cloudflare更新服务条款明确说明不得将其作为代理使用 也不得优选IP](https://www.landiannews.com/archives/107113.html)。
+
+本项目仅供学习和测试使用使用，请于 24 小时后取消 cloudflare 的部署。
+
+
 ## 快速部署
 请将本项目仓库 fork 到自己的 github 仓库，然后在 cloudflare pages 中新建项目来使用。
 1.使用 cloudflare 账号登录其 dashboard 后台，选择 **Workers 和 Pages** 菜单，然后点击 **概述**，接着点击 **创建** 按钮，在打开的页面中选择 Pages 选项卡：
@@ -16,7 +23,7 @@
 
 **图2**
 
-3.除了项目名字和输出目录之外，所有配置项都使用默认值即可，点击 **保存并部署** 按钮：
+3.除了项目名字和输出目录 **public** 之外，所有配置项都使用默认值即可，点击 **保存并部署** 按钮：
 
 ![](docs/save_config.png)
 
@@ -62,5 +69,7 @@ Error response from daemon: Head "https://你的部署域名/v2/library/镜像�
 #### WHITE_LIST
 镜像站允许的用户列表，多个用户之间用英文逗号分隔，默认为空。`WHITE_LIST` 生效后，在拉取任何镜像时，你需要确保 `docker login` (或者 `podman login`) 命令之前已经调用成功，否则后端读取不到登录用户，会直接报错，不会再拉取镜像。
 
-
+## 已知问题
+### 关于部署后域名无法访问问题
+cloudflare pages 解析出来的域名可能在某些运营商上无法访问，这时可以借助优选 IP 项目 [CloudflareSpeedTest](https://github.com/XIU2/CloudflareSpeedTest) ，找到一个本地访问最好的 IP ，配置到本地 hosts 中。注意优选 IP 依然是有违 cloudflare 条款的。
 
