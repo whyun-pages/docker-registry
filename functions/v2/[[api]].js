@@ -22,7 +22,7 @@ export async function onRequest(context) {
     body: request.body,
     redirect: isDockerHub ? 'manual' : 'follow',
   });
-  const registryResponse = await fetch(registryRequest);
+  let registryResponse = await fetch(registryRequest);
   if (registryResponse.status === 307 && isDockerHub) {
     const location = registryResponse.headers.get('location');
     registryRequest = new Request(location, {
@@ -31,6 +31,7 @@ export async function onRequest(context) {
       body: request.body,
       redirect: 'follow',
     });
+    registryResponse = await fetch(registryRequest);
   }
   const isDebug = context.env.DEBUG === 'true';
   
