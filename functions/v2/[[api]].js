@@ -38,7 +38,7 @@ export async function onRequest(context) {
   if (isDebug) {
     const responseCloned = registryResponse.clone();
     let body = '';
-    if (registryResponse.headers.get('content-type').includes('application')) {
+    if (registryResponse.headers.get('content-type').includes('json')) {
       body = await responseCloned.text();
     }
     console.log(
