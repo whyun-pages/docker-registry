@@ -69,6 +69,8 @@ Error response from daemon: Head "https://你的部署域名/v2/library/镜像�
 #### WHITE_LIST
 镜像站允许的用户列表，多个用户之间用英文逗号分隔，默认为空。`WHITE_LIST` 生效后，在拉取任何镜像时，你需要确保 `docker login` (或者 `podman login`) 命令之前已经调用成功，否则后端读取不到登录用户，会直接报错，不会再拉取镜像。
 
+注意配置了此环境变量时，虽然增加了安全性，也同时会牺牲 docker 命令的便利性。配置此变量，意味着你不能通过 `docker pull alpine` 来拉取镜像，你必须使用 `docker pull docker-registry-xxx.pages.dev/library/alpine` 来拉取镜像。
+
 ## 已知问题
 ### 关于部署后域名无法访问问题
 cloudflare pages 解析出来的域名可能在某些运营商上无法访问，这时可以借助优选 IP 项目 [CloudflareSpeedTest](https://github.com/XIU2/CloudflareSpeedTest) ，找到一个本地访问最好的 IP ，配置到本地 hosts 中。注意优选 IP 依然是有违 cloudflare 条款的。
