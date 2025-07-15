@@ -50,6 +50,28 @@ Cloudflare 在 2024 年 12 月 3 日更新使用协议，此次更新 Cloudflare
 更多详细使用教程参见 [cloudflare page 教程（一）项目初始化](https://blog.whyun.com/posts/project-init-on-cloudflare-pages/) 。
 
 ## 配置
+### 镜像源配置
+#### docker
+修改 `/etc//docker/daemon.json`，在 registry-mirrors 属性数组中添加刚才部署的网站。
+```json
+{
+  "registry-mirrors": [
+    "https://docker-registry-xxx.pages.dev"
+  ]
+}
+```
+
+然后运行 `sudo systemctl restart docker` 后即可生效。
+#### podman
+修改 `/etc/containers/registries.conf`，找到 [[registry]] 配置项，并修改以下属性：
+
+```ini
+[[registry]]
+prefix = "docker.io"
+insecure = false
+blocked = false
+location = "docker-registry.whyun.com"
+```
 ### 登录配置
 
 当前项目部署完成后，必须使用 docker login 命令进行登录，才能正常使用。否则进行 docker pull 镜像的时候，会如下报错：
@@ -60,6 +82,8 @@ Error response from daemon: Head "https://你的部署域名/v2/library/镜像�
 同时需要注意，docker login 默认会登录 docker hub 镜像站，但是我们的自己搭建的 Pages 网站使用的域名和 docker.io 不是一个域名，所以需要在调用 docker login 命令时追加 Pages 网站部署域名，即 `docker login 你的部署域名`。
 
 例如你的镜像站域名是 `docker-registry-xxx.pages.dev` ，那么需要保证调用 `docker login docker-registry-xxx.pages.dev` 是成功的。
+
+> 对于 podman 来说对应的命令是 `podman pull 域名` 。
 ### 权限配置
 可以通过配置若干环境变量，来对镜像代理的行为做控制。
 
@@ -70,6 +94,8 @@ Error response from daemon: Head "https://你的部署域名/v2/library/镜像�
 镜像站允许的用户列表，多个用户之间用英文逗号分隔，默认为空。`WHITE_LIST` 生效后，在拉取任何镜像时，你需要确保 `docker login` (或者 `podman login`) 命令之前已经调用成功，否则后端读取不到登录用户，会直接报错，不会再拉取镜像。
 
 注意配置了此环境变量时，虽然增加了安全性，也同时会牺牲 docker 命令的便利性。配置此变量，意味着你不能通过 `docker pull alpine` 来拉取镜像，你必须使用 `docker pull docker-registry-xxx.pages.dev/library/alpine` 来拉取镜像。
+
+如果想实现写短名字拉取镜像的方式，可以尝试使用 podman。
 
 ## 已知问题
 ### 关于部署后域名无法访问问题
