@@ -14,6 +14,9 @@ export async function onRequest(context) {
   const headers = new Headers(request.headers);
   const isDockerHub = registryHost === DOCKER_HUB_REGISTRY;
   headers.set('host', registryHost);
+  if (url.pathname.includes('/blobs/sha256:')) {
+    headers.set('x-amz-content-sha256', 'UNSIGNED-PAYLOAD');
+  }
 
   const registryUrl = `https://${registryHost}${path}`;
   let registryRequest = new Request(registryUrl, {
