@@ -14,14 +14,6 @@ export async function onRequest(context) {
   const headers = new Headers(request.headers);
   const isDockerHub = registryHost === DOCKER_HUB_REGISTRY;
   headers.set('host', registryHost);
-  if (url.pathname.includes('/blobs/sha256:')) {
-    if (!headers.has('x-amz-content-sha256')) {
-      headers.set('x-amz-content-sha256', 'UNSIGNED-PAYLOAD');
-    }
-    if (!headers.has('x-amz-date')) {
-      headers.set('x-amz-date', new Date().toISOString().replace(/[:-]|\.\d{3}/g, ''));
-    }    
-  }
 
   const registryUrl = `https://${registryHost}${path}`;
   let registryRequest = new Request(registryUrl, {
@@ -31,12 +23,11 @@ export async function onRequest(context) {
     redirect: isDockerHub ? 'manual' : 'follow',
   });
   let registryResponse = await fetch(registryRequest);
+  let location;
   if (registryResponse.status === 307 && isDockerHub) {
-    const location = registryResponse.headers.get('location');
+    location = registryResponse.headers.get('location');
     registryRequest = new Request(location, {
-      method: request.method,
-      headers: headers,
-      body: request.body,
+      method: 'GET',
       redirect: 'follow',
     });
     registryResponse = await fetch(registryRequest);
@@ -52,8 +43,9 @@ export async function onRequest(context) {
     console.log(
       'req on',
       request.url,
+      location,
       registryResponse.status,
-      'req headers', JSON.stringify(Object.fromEntries(new Map(request.headers))),
+      'req headers', JSON.stringify(Object.fromEntries(new Map(headers.entries()))),
       'res headers', JSON.stringify(Object.fromEntries(new Map(registryResponse.headers))),
       body,
     );
