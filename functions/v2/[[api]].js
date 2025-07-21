@@ -15,7 +15,12 @@ export async function onRequest(context) {
   const isDockerHub = registryHost === DOCKER_HUB_REGISTRY;
   headers.set('host', registryHost);
   if (url.pathname.includes('/blobs/sha256:')) {
-    headers.set('x-amz-content-sha256', 'UNSIGNED-PAYLOAD');
+    if (!headers.has('x-amz-content-sha256')) {
+      headers.set('x-amz-content-sha256', 'UNSIGNED-PAYLOAD');
+    }
+    if (!headers.has('x-amz-date')) {
+      headers.set('x-amz-date', new Date().toISOString().replace(/[:-]|\.\d{3}/g, ''));
+    }    
   }
 
   const registryUrl = `https://${registryHost}${path}`;
