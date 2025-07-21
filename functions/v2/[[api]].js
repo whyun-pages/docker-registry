@@ -24,7 +24,7 @@ export async function onRequest(context) {
   });
   let registryResponse = await fetch(registryRequest);
   let location;
-  if (registryResponse.status === 307 && isDockerHub) {
+  if (registryResponse.status === 307 && isDockerHub) {// fetch s3 blob
     location = registryResponse.headers.get('location');
     registryRequest = new Request(location, {
       method: 'GET',

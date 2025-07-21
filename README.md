@@ -81,9 +81,9 @@ location = "docker-registry-xxx.pages.dev"
 
 通过配置环境变量 `WHITE_LIST` 来控制允许的用户列表，多个用户之间用英文逗号分隔。`WHITE_LIST` 生效后，在拉取任何镜像时，你需要确保 `docker login` (或者 `podman login`) 命令之前已经调用成功，否则后端读取不到登录用户，会直接报错，不会再拉取镜像。比如你的镜像站域名是 `docker-registry-xxx.pages.dev` ，那么需要保证调用 `docker login docker-registry-xxx.pages.dev` 是成功的。
 
-> 可以通过 cloudflare dashboard 的面板进行环境变量设置。
+> 可以通过 cloudflare dashboard 的面板进行环境变量设置。  
 > ![](docs/set_variable.png)  
-> **图7**
+> **图 2.2.1**
 
 注意配置了此环境变量时，虽然增加了安全性，也同时会牺牲 docker 命令的便利性。配置此变量，意味着你不能通过 `docker pull alpine` 来拉取镜像，你必须使用 `docker pull docker-registry-xxx.pages.dev/library/alpine` 来拉取镜像。
 
